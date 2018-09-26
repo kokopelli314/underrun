@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.16.3",
     "uglify-es": "^3.3.9"
   }
 }

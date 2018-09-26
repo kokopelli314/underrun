@@ -18,7 +18,7 @@ audio_init(function(){
 		});
 	};
 
-	terminal_run_intro();
+	// terminal_run_intro();
 });
 
 

@@ -6,7 +6,7 @@ class entity_player_t extends entity_t {
 
 	_update() {
 		var t = this,
-			speed = 128;
+			speed = 500;
 
 		// movement
 		t.ax = keys[key_left] ? -speed : keys[key_right] ? speed : 0;
@@ -29,7 +29,7 @@ class entity_player_t extends entity_t {
 		if (keys[key_shoot] && t._last_shot < 0) {
 			audio_play(audio_sfx_shoot);
 			new entity_plasma_t(t.x, 0, t.z, 0, 26, angle + _math.random() * 0.2 - 0.11);
-			t._last_shot = 0.1;
+			t._last_shot = 0.03;
 		}
 
 		super._update();

@@ -20,6 +20,7 @@ var
 
 
 	camera_x = 0, camera_y = 0, camera_z = 0, camera_shake = 0,
+	camera_vertical_shift = -10,
 	camera_uniform,	
 
 	shader_attribute_vec = 'attribute vec',
@@ -58,16 +59,16 @@ var
 		shader_uniform + "sampler2D s;" +
 		"void main(void){" +
 			"vec4 t=texture2D(s,vuv);" +
-			"if(t.a<.8)" + // 1) discard alpha
-				"discard;" + 
+			// "if(t.a<.8)" + // 1) discard alpha
+			// 	"discard;" + 
 			"if(t.r>0.95&&t.g>0.25&&t.b==0.0)" + // 2) red glowing spider eyes
 				"gl_FragColor=t;" +
 			"else{" +  // 3) calculate color with lights and fog
 				"gl_FragColor=t*vec4(vl,1.);" +
-				"gl_FragColor.rgb*=smoothstep(" +
-					"112.,16.," + // fog far, near
-					"gl_FragCoord.z/gl_FragCoord.w" + // fog depth
-				");" +
+				// "gl_FragColor.rgb*=smoothstep(" +
+				// 	"224.,32.," + // fog far, near
+				// 	"gl_FragCoord.z/gl_FragCoord.w" + // fog depth
+				// ");" +
 			"}" +
 			"gl_FragColor.rgb=floor(gl_FragColor.rgb*6.35)/6.35;" + // reduce colors to ~256
 		"}";
@@ -76,14 +77,11 @@ var
 function renderer_init() {
 
 	// Create shorthand WebGL function names
-	// var webglShortFunctionNames = {};
 	for (var name in gl) {
 		if (gl[name].length != udef) {
 			gl[name.match(/(^..|[A-Z]|\d.|v$)/g).join('')] = gl[name];
-			// webglShortFunctionNames[name] = 'gl.'+name.match(/(^..|[A-Z]|\d.|v$)/g).join('');
 		}
 	}
-	// console.log(JSON.stringify(webglShortFunctionNames, null, '\t'));
 
 	vertex_buffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
@@ -127,7 +125,7 @@ function renderer_prepare_frame() {
 }
 
 function renderer_end_frame() {
-	gl.uniform3f(camera_uniform, camera_x, camera_y - 10, camera_z-30);
+	gl.uniform3f(camera_uniform, camera_x, camera_y + camera_vertical_shift, camera_z-30+camera_vertical_shift/2);
 	gl.uniform1fv(light_uniform, light_data);
 
 	gl.clearColor(0,0,0,1);

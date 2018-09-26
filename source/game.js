@@ -176,6 +176,13 @@ _document.onmouseup = function(ev) {
 	preventDefault(ev);
 }
 
+_document.onmousewheel = function(ev) {
+	let delta = ev.wheelDelta / 20;
+	console.log(delta)
+	camera_vertical_shift += delta;
+	preventDefault(ev)
+}
+
 function game_tick() {
 	var time_now = performance.now();
 	time_elapsed = (time_now - time_last)/1000;
