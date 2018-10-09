@@ -5,6 +5,7 @@ class entity_spider_t extends entity_t {
 		this._select_target_counter = 0;
 		this._target_x = this.x;
 		this._target_z = this.z;
+		this.is_being = true;
 	}
 	
 	_update() {
@@ -66,5 +67,11 @@ class entity_spider_t extends entity_t {
 		new entity_explosion_t(this.x, 0, this.z, 0, 26);
 		camera_shake = 1;
 		audio_play(audio_sfx_explode);
+	}
+
+	_render() {
+		this._frame++;
+		super._render();
+		push_light(this.x, 0, this.z, 1, 0.25, 0.1, 0.05);
 	}
 }

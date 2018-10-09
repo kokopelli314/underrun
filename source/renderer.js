@@ -14,9 +14,9 @@ var
 	buffer_data = new Float32Array(max_verts*8), // allow 64k verts, 8 properties per vert
 
 	light_uniform,
-	max_lights = 32,
+	max_lights = 128,
 	num_lights = 0,
-	light_data = new Float32Array(max_lights*7), // 32 lights, 7 properties per light
+	light_data = new Float32Array(max_lights*7), // 128 lights, 7 properties per light
 
 
 	camera_x = 0, camera_y = 0, camera_z = 0, camera_shake = 0,

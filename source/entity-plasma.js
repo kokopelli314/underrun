@@ -4,11 +4,12 @@ class entity_plasma_t extends entity_t {
 		var speed = 96;
 		this.vx = _math.cos(angle) * speed;
 		this.vz = _math.sin(angle) * speed;
+		this.is_being = false
 	}
 
 	_render() {
 		super._render();
-		push_light(this.x, 4, this.z + 6, 0.2, 0.5, 0.5, 0.04);
+		push_light(this.x, 4, this.z + 6, 0.2, 0.1, 0.5, 0.06);
 	}
 
 	_did_collide() {

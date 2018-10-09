@@ -1,12 +1,22 @@
 
 class entity_player_t extends entity_t {
 	_init() {
-		this._bob = this._last_shot = this._last_damage = this._frame = 0;
+		this._bob = this._last_shot = this._last_damage = this._last_target_pick = this._frame = 0;
+		this._target = null;
 	}
 
 	_update() {
 		var t = this,
 			speed = 500;
+
+		// pick target
+		t._last_target_pick -= time_elapsed
+		if (t._last_target_pick < 0) {
+			t._target = this._pick_target()
+			t._last_target_pick = 1
+			console.log('picked target')
+			console.log(t._target)
+		}
 
 		// movement
 		t.ax = keys[key_left] ? -speed : keys[key_right] ? speed : 0;
@@ -26,13 +36,34 @@ class entity_player_t extends entity_t {
 		t._last_damage -= time_elapsed;
 		t._last_shot -= time_elapsed;
 
-		if (keys[key_shoot] && t._last_shot < 0) {
-			audio_play(audio_sfx_shoot);
-			new entity_plasma_t(t.x, 0, t.z, 0, 26, angle + _math.random() * 0.2 - 0.11);
-			t._last_shot = 0.03;
+		if (t._last_shot < 0 && t._target !== null) {
+			let fire_angle = Math.atan2(
+				t._target.z - t.z,
+				t._target.x - t.x,
+			)
+			// audio_play(audio_sfx_shoot);
+			new entity_plasma_t(t.x, 0, t.z, 0, 26, fire_angle + _math.random() * 0.2 - 0.11);
+			t._last_shot = 0.1;
 		}
 
+
 		super._update();
+	}
+
+	_pick_target() {
+		let target = null;
+		let t = this;
+		let min_d = Infinity;
+		for (let e of entities) {
+			if (!e.is_being || e === this || e._dead) continue;
+			let d = _math.sqrt((t.z - e.z) ** 2 + (t.x - e.x) ** 2);
+			if (d < min_d && d < 60) {
+				min_d = d;
+				target = e;
+				// console.log(`dist = ${min_d}`)
+			}
+		}
+		return target
 	}
 
 	_render() {
@@ -52,6 +83,10 @@ class entity_player_t extends entity_t {
 			'RESTORING BACKUP...'
 		);
 		setTimeout(reload_level, 3000);
+
+		new entity_explosion_t(this.x, 0, this.z, 0, 26);
+		camera_shake = 10;
+		audio_play(audio_sfx_explode);
 	}
 
 	_receive_damage(from, amount) {

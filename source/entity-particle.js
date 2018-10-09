@@ -2,6 +2,7 @@
 class entity_particle_t extends entity_t {
 	_init() {
 		this._lifetime = 3;
+		this.is_being = false
 	}
 
 	_update() {

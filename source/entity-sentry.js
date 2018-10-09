@@ -5,6 +5,7 @@ class entity_sentry_t extends entity_t {
 		this._target_x = this.x;
 		this._target_z = this.z;
 		this.h = 20;
+		this.is_being = true;
 	}
 	
 	_update() {
